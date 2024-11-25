@@ -26,4 +26,4 @@ ENV SHELL=/bin/bash
 
 WORKDIR /workspace/F5-TTS
 
-CMD ["f5-tts_infer-gradio", "--port 7860"]
+CMD ["f5-tts_infer-gradio", "--port", "7860"]
