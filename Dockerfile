@@ -4,7 +4,7 @@ USER root
 
 ARG DEBIAN_FRONTEND=noninteractive
 
-LABEL github_repo="https://github.com/procrastinando/F5-TTS-dockerfile"
+LABEL github_repo="https://github.com/SWivid/F5-TTS"
 
 RUN set -x \
     && apt-get update \
@@ -13,21 +13,17 @@ RUN set -x \
     && apt-get install -y librdmacm1 libibumad3 librdmacm-dev libibverbs1 libibverbs-dev ibverbs-utils ibverbs-providers \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get clean
-
+    
 WORKDIR /workspace
 
-# Clone the repository and set it up
-RUN git clone https://github.com/procrastinando/F5-TTS-dockerfile.git \
-    && cd F5-TTS-dockerfile \
+RUN git clone https://github.com/SWivid/F5-TTS.git \
+    && cd F5-TTS \
     && git submodule update --init --recursive \
     && sed -i '7iimport sys\nsys.path.append(os.path.dirname(os.path.abspath(__file__)))' src/third_party/BigVGAN/bigvgan.py \
-    && pip install -r requirements.txt --no-cache-dir \
     && pip install -e . --no-cache-dir
 
 ENV SHELL=/bin/bash
 
-# Set the working directory to the F5-TTS folder
-WORKDIR /workspace/F5-TTS-dockerfile
+WORKDIR /workspace/F5-TTS
 
-# Command to start the Gradio Web UI
-CMD ["f5-tts_infer-gradio"]
+CMD ["f5-tts_infer-gradio", "--port 7860"]
